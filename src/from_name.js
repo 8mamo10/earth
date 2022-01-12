@@ -2,6 +2,6 @@
 
 var image = ee.Image('CGIAR/SRTM90_V4');
 // Center the Map.
-Map.setCenter(-110, 40, 5);
+Map.setCenter(140, 36, 8);
 // Display the image.
-Map.addLayer(image, { min: 0, max: 3000 }, 'SRTM');
+Map.addLayer(image, { min: 3000, max: 4000, palette: ['FFFFFF', '000000'] }, 'SRTM');
