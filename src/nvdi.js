@@ -10,12 +10,15 @@ var images = ee.ImageCollection('MODIS/006/MOD09A1')
 var image = ee.Image(images.first());
 var ndvi = calc_MODIS_NDVI(image);
 
-
 Map.setCenter(120, 35, 4);
 var visParams = {
   bands: ['NDVI'], min: 0.0, max: 1.0, palette: ['0000FF', 'FFFF00', 'FF0000']
 };
 Map.addLayer(ndvi.clip(roi), visParams);
+
+var ndvi_series = images.map(calc_MODIS_NDVI);
+var ndvi_max = ndvi_series.max();
+Map.addLayer(ndvi_max.clip(roi), visParams);
 
 function calc_MODIS_NDVI(image) {
   var red = image.select('sur_refl_b01');
