@@ -3,27 +3,21 @@ var finish = ee.Date('2005-12-31');
 
 var roi = ee.Geometry.Rectangle(90, 5, 150, 55);
 
-var images = ee.ImageCollection('MODIS/006/MOD09A1')
-  .filterDate(start, finish);
-
-// need to cast as ee.Image
-var image = ee.Image(images.first());
-var ndvi = calc_MODIS_NDVI(image);
-
-Map.setCenter(120, 35, 4);
-var visParams = {
-  bands: ['NDVI'], min: 0.0, max: 1.0, palette: ['0000FF', 'FFFF00', 'FF0000']
-};
-//Map.addLayer(ndvi.clip(roi), visParams);
-
-var ndvi_series = images.map(calc_MODIS_NDVI);
-var ndvi_max = ndvi_series.max();
-
 var elev = ee.Image("USGS/GTOPO30");
 var land = elev.gte(0);
 
+var images = ee.ImageCollection('MODIS/006/MOD09A1')
+  .filterDate(start, finish);
+
+var ndvi_series = images.map(calc_MODIS_NDVI);
+var ndvi_max = ndvi_series.max();
 var ndvi_max_land = ndvi_max.updateMask(land);
 
+var visParams = {
+  bands: ['NDVI'], min: 0.0, max: 1.0, palette: ['0000FF', 'FFFF00', 'FF0000']
+};
+
+Map.setCenter(120, 35, 4);
 Map.addLayer(ndvi_max_land.clip(roi), visParams);
 
 function calc_MODIS_NDVI(image) {
