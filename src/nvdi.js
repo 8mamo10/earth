@@ -21,10 +21,13 @@ Map.setCenter(120, 35, 4);
 Map.addLayer(ndvi_max_land.clip(roi), visParams);
 
 function calc_MODIS_NDVI(image) {
-  var red = image.select('sur_refl_b01');
-  var nir = image.select('sur_refl_b02');
-  var nir_minus_red = nir.subtract(red);
-  var nir_plus_red = nir.add(red);
-  var ndvi = nir_minus_red.divide(nir_plus_red).rename("NDVI");
+  /*
+    var red = image.select('sur_refl_b01');
+    var nir = image.select('sur_refl_b02');
+    var nir_minus_red = nir.subtract(red);
+    var nir_plus_red = nir.add(red);
+    var ndvi = nir_minus_red.divide(nir_plus_red).rename("NDVI");
+    */
+  var ndvi = image.normalizedDifference(['sur_refl_b02', 'sur_refl_b01']).rename('NDVI');
   return ndvi;
 }
