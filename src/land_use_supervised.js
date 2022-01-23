@@ -49,11 +49,12 @@ var training = input.select(bands).sampleRegions({
   scale: 10
 });
 
-var classifier = ee.Classifier.randomForest(4).train({
+var classifier = ee.Classifier.smileRandomForest(4).train({
   features: training,
   classProperty: 'landcover',
   inputProperties: bands,
 });
 
 var classified = input.select(bands).classify(classifier);
-Map.addLayer(classified, { min: 1, max: 4, palette: ['blue', 'red', 'green', 'yellow'] }) 
+Map.addLayer(classified, { min: 1, max: 4, palette: ['blue', 'red', 'green', 'yellow'] })
+
